@@ -16,22 +16,39 @@ def random_pos():
 def collision(a, b):
     return (a[0] == b[0]) and (a[1] == b[1])
 
+def snake_bloom(radius, color):
+    surf = pygame.Surface((radius * 2, radius * 2))
+    #pygame.draw.circle(surf, color, (radius, radius), radius)
+    surf.fill(color)
+    surf.set_colorkey((0, 0, 0))
+    return surf
+
 pygame.init()
 screen = pygame.display.set_mode((1000, 600))
-
 pygame.display.set_caption("Snake")
 
+# Snake
 snake = [(500, 500), (510, 500), (520, 500)]
 skin = pygame.Surface((10,10))
 skin.fill((255,255,255))
 
+# Apple
 pos_apple = random_pos()
 apple = pygame.Surface((10,10))
 apple.fill((255,0,0))
 
+# Bloom and Fog
+fog = pygame.Surface((1000, 600))
+fog.fill((20, 20, 20))
+bloom = pygame.image.load(r"./images/bloom_soft.png").convert_alpha()
+bloom = pygame.transform.scale(bloom, (15, 15))
+bloom_rect = bloom.get_rect()
+
+
 direction = right
 clock = pygame.time.Clock()
 
+# Game Over screen
 font = pygame.font.Font('freesansbold.ttf', 64)
 font2 = pygame.font.Font('freesansbold.ttf', 32)
 font3 = pygame.font.Font('freesansbold.ttf', 25)
@@ -47,6 +64,7 @@ try_againRect.center = (500, 300)
 
 ap = 0
 
+# Game itself
 while True:
     clock.tick(25)
     screen.fill((0,0,0))
@@ -96,10 +114,21 @@ while True:
         pygame.mixer.music.load(r"./audios/apple_1.mp3")
         pygame.mixer.music.play()
         snake.append((0,0))
-    
 
     for i in range(len(snake) - 1, 0, -1):
         snake[i] = (snake[i-1][0], snake[i-1][1])
+
+    #def render_fog(pos):
+       #fog.fill((20,20,20))
+       #bloom_rect.center = pos
+       #fog.blit(bloom, bloom_rect)
+       #screen.blit(fog, (0, 0), special_flags=BLEND_MULT)
+
+    for pos in snake:
+        screen.blit(skin, pos)
+        #render_fog(pos)
+        #screen.blit(snake_bloom(6, (168, 168, 168)), (pos[0]-1, pos[1]-1), special_flags = BLEND_RGB_ADD)
+
 
     for i in range(len(snake) - 1, 2, -1):
         if collision(snake[0], snake[i]):
@@ -116,7 +145,7 @@ while True:
                             if event.key == K_ESCAPE:
                                 exit()
     
-    if snake[0][0] == 0 or snake[0][0] == 1000 or snake[0][1] == 0 or snake[0][1] == 600:
+    if snake[0][0] < 0 or snake[0][0] >= 1000 or snake[0][1] < 0 or snake[0][1] >= 600:
         pygame.mixer.music.load(r"./audios/game_over.mp3")
         pygame.mixer.music.play()
         
@@ -138,7 +167,7 @@ while True:
 
     screen.blit(apple, pos_apple)
 
-    for pos in snake:
-        screen.blit(skin, pos)
+
+
 
     pygame.display.update()
