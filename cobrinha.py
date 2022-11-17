@@ -115,19 +115,6 @@ while True:
         pygame.mixer.music.play()
         snake.append((0,0))
 
-    for i in range(len(snake) - 1, 0, -1):
-        snake[i] = (snake[i-1][0], snake[i-1][1])
-
-    #def render_fog(pos):
-       #fog.fill((20,20,20))
-       #bloom_rect.center = pos
-       #fog.blit(bloom, bloom_rect)
-       #screen.blit(fog, (0, 0), special_flags=BLEND_MULT)
-
-    for pos in snake:
-        screen.blit(skin, pos)
-        #render_fog(pos)
-        #screen.blit(snake_bloom(6, (168, 168, 168)), (pos[0]-1, pos[1]-1), special_flags = BLEND_RGB_ADD)
 
 
     for i in range(len(snake) - 1, 2, -1):
@@ -159,6 +146,20 @@ while True:
                     if event.key == K_ESCAPE:
                         exit()
                 
+    for i in range(len(snake) - 1, 0, -1):
+        snake[i] = (snake[i-1][0], snake[i-1][1])
+
+    #def render_fog(pos):
+       #fog.fill((20,20,20))
+       #bloom_rect.center = pos
+       #fog.blit(bloom, bloom_rect)
+       #screen.blit(fog, (0, 0), special_flags=BLEND_MULT)
+
+    for pos in snake:
+        screen.blit(skin, pos)
+        #render_fog(pos)
+        #screen.blit(snake_bloom(6, (168, 168, 168)), (pos[0]-1, pos[1]-1), special_flags = BLEND_RGB_ADD)
+        
     scrtxt = str(ap)
     score = font3.render(f"score: {scrtxt}", True, (255, 255, 255), (0, 0, 0))
     scoreRect = score.get_rect()
